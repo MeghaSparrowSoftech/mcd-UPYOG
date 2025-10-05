@@ -83,6 +83,15 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
         },
       },
       {
+        Header: t("HR_ZONE_LABEL"),
+        disableSortBy: true,
+        Cell: ({ row }) => {
+          const zone = row.original?.jurisdictions?.[0]?.zone;
+          return GetCell(zone ? t(`COMMON_MASTERS_ZONE_${zone}`) : "");
+        },
+      },
+
+      {
         Header: t("HR_STATUS_LABEL"),
         disableSortBy: true,
         Cell: ({ row }) => {

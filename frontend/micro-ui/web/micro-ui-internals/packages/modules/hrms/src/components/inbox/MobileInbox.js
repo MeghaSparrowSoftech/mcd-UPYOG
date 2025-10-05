@@ -42,6 +42,7 @@ const GetSlaCell = (value) => {
       [t("HR_ROLE_NO_LABEL")]: GetCell(original?.user?.roles.length || ""),
       [t("HR_DESG_LABEL")]: GetCell(t("COMMON_MASTERS_DESIGNATION_" +original?.assignments?.sort((a, b) => new Date(a.fromDate) - new Date(b.fromDate))[0]?.designation)),
       [t("HR_DEPT_LABEL")]: GetCell(t(`COMMON_MASTERS_DEPARTMENT_${original?.assignments?.sort((a, b) => new Date(a.fromDate) - new Date(b.fromDate))[0]?.department}`)),
+      [t("HR_ZONE_LABEL")]: GetCell(t(`COMMON_MASTERS_ZONE_${original?.jurisdictions?.[0]?.zone}`)),
       [t("HR_STATUS_LABEL")]: GetSlaCell(original?.isActive ? "ACTIVE" : "INACTIVE"),
     }));
   };

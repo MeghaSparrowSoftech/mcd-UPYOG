@@ -30,17 +30,40 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
       onSelectFilterRolessetSelectedRole(filters.role[0]);
     }
   }, [filters.role]);
+
   const [tenantId, settenantId] = useState(() => {
     return tenantIds.filter(
       (ele) =>
         ele.code == (searchParams?.tenantId != undefined ? { code: searchParams?.tenantId } : { code: Digit.ULBService.getCurrentTenantId() })?.code
     )[0];
   });
+
   const { isLoading, isError, errors, data: data, ...rest } = Digit.Hooks.hrms.useHrmsMDMS(
     tenantId ? tenantId.code : searchParams?.tenantId,
     "egov-hrms",
     "HRMSRolesandDesignation"
   );
+
+  const { data: zoneMdmsData = [], isLoading: isZoneLoading } = Digit.Hooks.useCustomMDMS(
+    tenantId ? tenantId.code : searchParams?.tenantId,
+    "egov-location",
+    [
+      {
+        name: "TenantBoundary",
+      },
+    ],
+    {
+      select: (data) => {
+        const zones = data?.["egov-location"]?.TenantBoundary?.[0]?.boundary?.children || [];
+        return zones.map((zone) => ({
+          code: zone.code,
+          i18text: zone.name || zone.code,
+        }));
+      },
+      enabled: !!tenantId,
+    }
+  );
+
   const [departments, setDepartments] = useState(() => {
     return { departments: null };
   });
@@ -48,8 +71,13 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
   const [roles, setRoles] = useState(() => {
     return { roles: null };
   });
+
   const [isActive, setIsactive] = useState(() => {
     return { isActive: true };
+  });
+
+  const [zones, setZones] = useState(() => {
+    return { zones: null };
   });
 
   useEffect(() => {
@@ -64,7 +92,6 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
       filters.role.forEach((ele) => {
         res.push(ele.code);
       });
-
       setSearchParams({ ..._searchParams, roles: [...res].join(",") });
       if (filters.role && filters.role.length > 1) {
         let res = [];
@@ -97,12 +124,21 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
       setSearchParams({ ..._searchParams, isActive: isActive.code });
     }
   }, [isActive]);
+
+  // 🔹 update searchParams when zone selected
+  useEffect(() => {
+    if (zones) {
+      setSearchParams({ ..._searchParams, zones: zones.code });
+    }
+  }, [zones]);
+
   const clearAll = () => {
     onFilterChange({ delete: Object.keys(searchParams) });
     settenantId(tenantIds.filter((ele) => ele.code == Digit.ULBService.getCurrentTenantId())[0]);
     setDepartments(null);
     setRoles(null);
     setIsactive(null);
+    setZones(null);
     props?.onClose?.();
     onSelectFilterRoles({ role: [] });
   };
@@ -122,6 +158,7 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
       </div>
     );
   };
+
   return (
     <React.Fragment>
       <div className="filter">
@@ -178,6 +215,13 @@ const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props 
                 t={t}
               />
             </div>
+
+            {/* 🔹 Fixed Zone filter */}
+            <div>
+              <div className="filter-label">{t("HR_ZONE_LABEL")}</div>
+              <Dropdown option={zoneMdmsData} selected={zones} select={setZones} optionKey={"i18text"} t={t} />
+            </div>
+
             <div>
               <div>
                 {GetSelectOptions(
