@@ -114,7 +114,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
         disableSortBy: true,
         Cell: ({ row }) => {
           const zone = row.original?.jurisdictions?.[0]?.zone;
-          return GetCell(zone ? t(`COMMON_MASTERS_ZONE_${zone}`) : "");
+          return GetCell(zone ? t(`TENANT_${zone}`) : "");
         },
       },
 
