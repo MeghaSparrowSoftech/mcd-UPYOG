@@ -35,15 +35,15 @@ async fetchTTL() {
     const tenantIdFull = getTenantId(); 
     const tenantParts = tenantIdFull.split('.');
     const cityCode = tenantParts.length > 1 ? tenantParts[1] : undefined;  // e.g. "pg.city"
-    const baseProxy = process.env.REACT_APP_BASE_PROXY;
+    const baseProxy = process.env.REACT_APP_BASE_PROXY; 
     const parsedURL = new URL(baseProxy);
     const domain = parsedURL.hostname;
-    const protocol = parsedURL.protocol;
+    const protocol = parsedURL.protocol; 
 
     // Construct URL dynamically based on tenant and environment
     const TtlUrl = `${protocol}//${cityCode}-${domain}/services/EGF/session/ttl`; 
-    // const localhost = "http://mcd.localhost:9090/services/EGF/session/ttl"; // for local dev only
-    const response = await fetch(TtlUrl, { credentials: "include" });
+    const localhost = "http://mcd.localhost:9090/services/EGF/session/ttl"; // for local dev only
+    const response = await fetch(localhost, { credentials: "include" });
     if (!response.ok) {
       console.warn("TTL API responded with status:", response.status);
       return;
@@ -75,13 +75,19 @@ async fetchTTL() {
     winheight = window.innerHeight - 100,
     erp_url,
     tenantId = getTenantId();
-    //Reading domain name from the request url
+    
+    //Reading domain name from the request url 
     domainurl = hostname.substring(hostname.indexOf(".") + 1);
     // Reading environment name (ex: dev, qa, uat, fin-uat etc) from the globalconfigs if exists else reading from the .env file
     finEnv = this.globalConfigExists() ? window.globalConfigs.getConfig("FIN_ENV") : process.env.REACT_APP_FIN_ENV;
     // Preparing finance subdomain url using the above environment name and the domain url
-    subdomainurl = !!(finEnv) ? "-" + finEnv + "." + domainurl : "." + domainurl;
-    erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + subdomainurl + menuUrl;
+    //subdomainurl = !!(finEnv) ? "-" + finEnv + "." + domainurl : "." + domainurl;
+    //erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + subdomainurl + menuUrl;
+
+    subdomainurl = hostname.substring(hostname.indexOf(".") + 1);
+    console.log(subdomainurl);
+    erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "." + subdomainurl + ":9090" +
+    menuUrl;
 
     return (
       <div>

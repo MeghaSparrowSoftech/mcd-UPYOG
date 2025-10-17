@@ -562,7 +562,7 @@ class UserSettings extends Component {
                   letterSpacing: "0.3px",
                 }}
               >
-                <span style={{ marginRight: "10px", opacity: 0.8 }}>Session Expires In:</span>
+                <span style={{ marginRight: "10px", opacity: 0.8 }}>Session Time:</span>
                 <span
                   style={{
                     backgroundColor:
@@ -708,7 +708,7 @@ class UserSettings extends Component {
 
           <DialogContent>
             <DialogContentText style={{ fontSize: "15px", color: "#444" }}>
-              Your session will expire in less than 3 minutes. Do you want to continue or logout now?
+              Your session will expire in less than 5 minutes. Do you want to continue or logout now?
               <br />
               <strong>Auto logout in: {`${Math.floor(this.state.popupTimer / 60)}:${String(this.state.popupTimer % 60).padStart(2, "0")}`}</strong>
             </DialogContentText>
