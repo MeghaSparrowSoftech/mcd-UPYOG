@@ -15,6 +15,7 @@ RUN yarn add @upyog/digit-ui-module-bills
 RUN yarn add @nudmcdgnpm/upyog-ui-module-cm
 RUN yarn add @nudmcdgnpm/upyog-ui-module-asset
 RUN yarn add @nudmcdgnpm/upyog-ui-module-vendor
+RUN yarn add @nudmcdgnpm/digit-ui-module-pgr
 
 ARG WORK_DIR
 WORKDIR /app

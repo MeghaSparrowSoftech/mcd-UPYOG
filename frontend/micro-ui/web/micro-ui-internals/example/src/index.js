@@ -56,37 +56,37 @@ import { pgrCustomizations, pgrComponents } from "./pgr";
 var Digit = window.Digit || {};
 
 const enabledModules = [
-  "PGR",
+  // "PGR",
   "FSM",
   "Payment",
-  "PT",
+  // "PT",
   "QuickPayLinks",
   "DSS",
   "MCollect",
   "HRMS",
-  "TL",
+  // "TL",
   "Receipts",
   "Reports",
-  "OBPS",
+  // "OBPS",
   "Engagement",
-  "NOC",
-  "WS",
+  // "NOC",
+  // "WS",
   "CommonPT",
   "NDSS",
   "Bills",
-  "SW",
+  // "SW",
   "BillAmendment",
   "FireNoc",
   "Birth",
   "Finance",
   "Death",
-  "PTR",
+  // "PTR",
   "ASSET",
-  "ADS",
-  "SV",
-  "EW",
-  "CHB",
-  "WT",
+  // "ADS",
+  // "SV",
+  // "EW",
+  // "CHB",
+  // "WT",
   "VENDOR",
   "MT"
 ];
@@ -166,13 +166,13 @@ const initDigitUI = () => {
   initDSSComponents();
   initMCollectComponents();
   initHRMSComponents();
-  initTLComponents();
+  // initTLComponents();
   initReceiptsComponents();
   // initReportsComponents();
-  initOBPSComponents();
+  // initOBPSComponents();
   initEngagementComponents();
-  initNOCComponents();
-  initWSComponents();
+  // initNOCComponents();
+  // initWSComponents();
   initCommonPTComponents();
   initBillsComponents();
   initFinanceComponents();

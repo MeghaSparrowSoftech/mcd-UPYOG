@@ -35,6 +35,7 @@
     "@upyog/digit-ui-module-commonpt":"1.8.1",
     "@upyog/digit-ui-module-receipts": "1.8.0",
     "@nudmcdgnpm/digit-ui-react-components": "1.2.13",
+    "@nudmcdgnpm/digit-ui-module-pgr": "1.2.1",
     "@nudmcdgnpm/upyog-ui-module-vendor":"1.2.1",
     "babel-loader": "8.1.0",
     "react": "17.0.2",

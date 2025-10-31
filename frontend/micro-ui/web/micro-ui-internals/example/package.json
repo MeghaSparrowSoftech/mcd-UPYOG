@@ -21,6 +21,7 @@
     "@nudmcdgnpm/upyog-ui-module-vendor": "1.2.1",
     "@mcd89/digit-ui-module-hrms": "1.2.13",
     "@mcd89/digit-ui-module-finance": "1.0.7",
+    "@nudmcdgnpm/digit-ui-module-pgr": "1.2.1",
     "http-proxy-middleware": "1.0.5",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -30,7 +31,7 @@
   },
   "browserslist": [
     ">0.2%",
-   "not dead",
-   "not op_mini all"
- ]
+    "not dead",
+    "not op_mini all"
+  ]
 }
