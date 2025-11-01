@@ -79,7 +79,7 @@ async fetchTTL() {
     clearInterval(this.countdownInterval);
 
     // Show alert or toast
-    alert("Your session has expired. Please log in again.");
+    // alert("Your session has expired. Please log in again.");
 
     try {
     // Attempt Redux logout (await ensures it completes)
@@ -252,7 +252,7 @@ async fetchTTL() {
       if (form) form.action = erp_url;
       this.submitIframeForm();
     });
-    console.log("Loading Finance Iframe URL:", erp_url);
+    // console.log("Loading Finance Iframe URL:", erp_url);
   }
   onMessage = (event) => {
     if (event.data != "close") return;

@@ -111,47 +111,23 @@ class UserSettings extends Component {
    * TTL Popup Logic
    */
   componentDidUpdate(prevProps) {
-    const { sessionTTL } = this.props;
-    const { sessionRefreshInProgress } = this.state;
+  const { sessionTTL } = this.props;
 
-    // Run only when TTL changes
-    if (sessionTTL !== prevProps.sessionTTL) {
-      // Ignore updates during refresh
-      if (sessionRefreshInProgress) return;
-
-      // If less than 5 minutes (300 sec), show popup with countdown
-      if (sessionTTL <= 300 && sessionTTL > 0 && !this.state.showSessionPopup) {
-        this.setState({ showSessionPopup: true, popupTimer: sessionTTL }, () => {
-          this.startPopupCountdown();
-        });
-      }
-
-      // If TTL refreshed and now > 5 minutes, close popup
-      if (sessionTTL > 300 && this.state.showSessionPopup) {
-        this.setState({ showSessionPopup: false, popupTimer: 0 });
-        if (this.popupInterval) {
-          clearInterval(this.popupInterval);
-          this.popupInterval = null;
-        }
-      }
-    }
+  // Show popup when TTL <= 300 and > 0
+  if (sessionTTL <= 300 && sessionTTL > 0 && !this.state.showSessionPopup) {
+    this.setState({ showSessionPopup: true });
   }
 
-  startPopupCountdown = () => {
-    if (this.popupInterval) clearInterval(this.popupInterval);
+  // Close popup if TTL refreshed above 5 min
+  if (sessionTTL > 300 && this.state.showSessionPopup) {
+    this.setState({ showSessionPopup: false });
+  }
 
-    this.popupInterval = setInterval(() => {
-      const { popupTimer } = this.state;
-
-      if (popupTimer <= 1) {
-        clearInterval(this.popupInterval);
-        this.popupInterval = null;
-        this.handleLogout(); // Auto logout when countdown ends
-      } else {
-        this.setState({ popupTimer: popupTimer - 1 });
-      }
-    }, 1000);
-  };
+  // Auto-logout when TTL hits 0
+  if (sessionTTL === 0) {
+    this.handleLogout();
+  }
+}
 
   async componentDidMount() {
     const userInfo = JSON.parse(getUserInfo());
@@ -710,7 +686,7 @@ class UserSettings extends Component {
             <DialogContentText style={{ fontSize: "15px", color: "#444" }}>
               Your session will expire in less than 5 minutes. Do you want to continue or logout now?
               <br />
-              <strong>Auto logout in: {`${Math.floor(this.state.popupTimer / 60)}:${String(this.state.popupTimer % 60).padStart(2, "0")}`}</strong>
+              <strong>Auto logout in: {Math.floor(sessionTTL / 60)}:{String(sessionTTL % 60).padStart(2, "0")}</strong>
             </DialogContentText>
           </DialogContent>
 
