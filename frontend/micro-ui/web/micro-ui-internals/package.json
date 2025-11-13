@@ -12,8 +12,7 @@
     "packages/modules/dss",
     "packages/modules/engagement",
     "packages/modules/asset",
-    "packages/modules/vendor",
-    "packages/modules/hrms"
+    "packages/modules/vendor"
   ],
   "license": "MIT",
   "private": true,

@@ -19,7 +19,7 @@
     "@nudmcdgnpm/upyog-ui-module-asset": "1.2.9",
     "@nudmcdgnpm/upyog-ui-module-cm": "1.2.2",
     "@nudmcdgnpm/upyog-ui-module-vendor": "1.2.1",
-    "@mcd89/digit-ui-module-hrms": "1.2.14",
+    "@mcd89/digit-ui-module-hrms": "1.2.15",
     "@mcd89/digit-ui-module-finance": "1.0.7",
     "@nudmcdgnpm/digit-ui-module-pgr": "1.2.1",
     "http-proxy-middleware": "1.0.5",
