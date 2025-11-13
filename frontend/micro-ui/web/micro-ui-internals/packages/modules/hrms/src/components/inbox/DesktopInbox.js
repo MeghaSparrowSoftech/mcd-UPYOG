@@ -301,7 +301,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
           onSort={props.onSort}
           disableSort={props.disableSort}
           sortParams={props.sortParams}
-          totalRecords={data?.length || 0}
+          totalRecords={props?.length || 0}
         />
       </React.Fragment>
     );
