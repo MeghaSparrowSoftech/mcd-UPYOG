@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 import { initLibraries } from "@nudmcdgnpm/digit-ui-libraries";
 import { PGRReducers } from "@nudmcdgnpm/digit-ui-module-pgr";
-import { PTModule, PTLinks, PTComponents } from "@upyog/digit-ui-module-pt";
+// import { PTModule, PTLinks, PTComponents } from "@upyog/digit-ui-module-pt";
 import { MCollectModule, MCollectLinks } from "@upyog/digit-ui-module-mcollect";
 // import { TLModule, TLLinks } from "@upyog/digit-ui-module-tl";
 import { initFSMComponents } from "@upyog/digit-ui-module-fsm";
@@ -14,14 +14,14 @@ import { initHRMSComponents } from "@mcd89/digit-ui-module-hrms";
 import { initReceiptsComponents, ReceiptsModule } from "@upyog/digit-ui-module-receipts";
 // import { initReportsComponents } from "@upyog/digit-ui-module-reports";
 import { initMCollectComponents } from "@upyog/digit-ui-module-mcollect";
-import { initTLComponents } from "@upyog/digit-ui-module-tl";
+// import { initTLComponents } from "@upyog/digit-ui-module-tl";
 import { PaymentModule, PaymentLinks, paymentConfigs } from "@upyog/digit-ui-module-common";
 import { HRMSModule } from "@mcd89/digit-ui-module-hrms";
 import { FinanceModule } from "@mcd89/digit-ui-module-finance";
-import { initOBPSComponents } from "@upyog/digit-ui-module-obps";
+// import { initOBPSComponents } from "@upyog/digit-ui-module-obps";
 import { initEngagementComponents } from "@upyog/digit-ui-module-engagement";
-import { initNOCComponents } from "@upyog/digit-ui-module-noc";
-import { initWSComponents } from "@upyog/digit-ui-module-ws";
+// import { initNOCComponents } from "@upyog/digit-ui-module-noc";
+// import { initWSComponents } from "@upyog/digit-ui-module-ws";@nudmcdgnpm/upyog-ui-module-ads
 import { DigitUI } from "@upyog/digit-ui-module-core";
 import { initCommonPTComponents } from "@upyog/digit-ui-module-commonpt";
 import { initBillsComponents, BillsModule } from "@upyog/digit-ui-module-bills";
@@ -32,19 +32,19 @@ import { initBillsComponents, BillsModule } from "@upyog/digit-ui-module-bills";
 // import { Body, TopBar } from "@nudmcdgnpm/digit-ui-react-components";
 import "@mcd89/upyog-css";
 
-import { PTRModule, PTRLinks, PTRComponents } from "@nudmcdgnpm/upyog-ui-module-ptr";
+// import { PTRModule, PTRLinks, PTRComponents } from "@nudmcdgnpm/upyog-ui-module-ptr";
 import { ASSETComponents, ASSETLinks, ASSETModule } from "@nudmcdgnpm/upyog-ui-module-asset";
 
-import { 
-  EWModule, 
-  EWLinks, 
-  EWComponents }
-  from "@nudmcdgnpm/upyog-ui-module-ew";
+// import { 
+//   EWModule, 
+//   EWLinks, 
+//   EWComponents }
+//   from "@nudmcdgnpm/upyog-ui-module-ew";
 
-import { SVComponents, SVLinks, SVModule } from "@nudmcdgnpm/upyog-ui-module-sv";
-import {CHBModule,CHBLinks,CHBComponents} from "@nudmcdgnpm/upyog-ui-module-chb";
-import {ADSModule,ADSLinks,ADSComponents} from "@nudmcdgnpm/upyog-ui-module-ads";
-import { WTModule, WTLinks, WTComponents } from "@nudmcdgnpm/upyog-ui-module-wt";
+// import { SVComponents, SVLinks, SVModule } from "@nudmcdgnpm/upyog-ui-module-sv";
+// import {CHBModule,CHBLinks,CHBComponents} from "@nudmcdgnpm/upyog-ui-module-chb";
+// import {ADSModule,ADSLinks,ADSComponents} from "@nudmcdgnpm/upyog-ui-module-ads";
+// import { WTModule, WTLinks, WTComponents } from "@nudmcdgnpm/upyog-ui-module-wt";
 import { VENDORComponents, VENDORLinks, VENDORModule } from "@nudmcdgnpm/upyog-ui-module-vendor";
 
 // import * as comps from "@nudmcdgnpm/digit-ui-react-components";
@@ -124,38 +124,38 @@ const initDigitUI = () => {
     PaymentModule,
     ...paymentConfigs,
     PaymentLinks,
-    PTModule,
-    PTLinks,
-    ...PTComponents,
+    // PTModule,
+    // PTLinks,
+    // ...PTComponents,
     MCollectLinks,
     MCollectModule,
     HRMSModule,
     FinanceModule,
     ReceiptsModule,
     BillsModule,
-    PTRModule, 
-    PTRLinks, 
-    ...PTRComponents,
+    // PTRModule, 
+    // PTRLinks, 
+    // ...PTRComponents,
     // TLModule,
     // TLLinks,
     ASSETModule,
     ASSETLinks,
     ...ASSETComponents,
-    ADSLinks,
-  ADSModule,
-  ...ADSComponents,
-  SVModule,
-  SVLinks,
-  ...SVComponents,
-  EWModule,
-  EWLinks,
-  ...EWComponents,
-  CHBModule,
-  CHBLinks,
-  ...CHBComponents,
-  WTModule,
-  WTLinks,
-  ...WTComponents,
+  //   ADSLinks,
+  // ADSModule,
+  // ...ADSComponents,
+  // SVModule,
+  // SVLinks,
+  // ...SVComponents,
+  // EWModule,
+  // EWLinks,
+  // ...EWComponents,
+  // CHBModule,
+  // CHBLinks,
+  // ...CHBComponents,
+  // WTModule,
+  // WTLinks,
+  // ...WTComponents,
   VENDORModule,
   VENDORLinks,
   ...VENDORComponents

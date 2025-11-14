@@ -37,20 +37,18 @@ const Inbox = ({ parentRoute, businessService = "HRMS", initialStates = {}, filt
   // Detect zone search
   const isZoneSearch = !!searchParams?.zone;
 
-  // 🔥 Pagination Params Logic (Main Fix)
+  // 🔥 Always backend pagination — never load all
   let paginationParams;
 
   if (isZoneSearch) {
-    // If zone searched → fetch ALL data from backend → no pagination
     paginationParams = {
-      limit: 100000,
-      offset: 0,
+      limit: 50,                          // FIXED 50 records per page
+      offset: pageOffset,                 // backend sends next set
       sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC"
     };
   } else {
-    // Normal paginated mode
     paginationParams = {
-      limit: pageSize,
+      limit: pageSize,                    // Normal pagination
       offset: pageOffset,
       sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC"
     };
@@ -65,16 +63,20 @@ const Inbox = ({ parentRoute, businessService = "HRMS", initialStates = {}, filt
     isupdate
   );
 
+  // Reset to first page when filters change
   useEffect(() => {
+    if (isZoneSearch) {
+      setPageSize(50);      // Zone search always shows 50 per page
+    }
     setPageOffset(0);
   }, [searchParams]);
 
   const fetchNextPage = () => {
-    setPageOffset((prevState) => prevState + pageSize);
+    setPageOffset((prev) => prev + pageSize);    // +50 when zone search
   };
 
   const fetchPrevPage = () => {
-    setPageOffset((prevState) => prevState - pageSize);
+    setPageOffset((prev) => prev - pageSize);
   };
 
   const handleFilterChange = (filterParam) => {
@@ -91,7 +93,9 @@ const Inbox = ({ parentRoute, businessService = "HRMS", initialStates = {}, filt
   }, []);
 
   const handlePageSizeChange = (e) => {
-    setPageSize(Number(e.target.value));
+    if (!isZoneSearch) {
+      setPageSize(Number(e.target.value));   // Only normal search can edit page size
+    }
   };
 
   const getSearchFields = () => {
