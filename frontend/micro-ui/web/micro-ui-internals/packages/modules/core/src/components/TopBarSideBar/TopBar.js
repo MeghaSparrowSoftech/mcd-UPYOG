@@ -135,7 +135,7 @@ const TopBar = ({
       {mobileView ? <Hamburger handleClick={toggleSidebar} color="#9E9E9E" /> : null}
       {/* <img className="city" /> */}
       <span style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-        <img className="city" src="https://mcdupyog.sparrowsoftech.in/employee/static/media/mcd-logo.b45b7066.png" />
+        <img className="city" src="https://abdeas-dev.sparrowsoftech.in/employee/static/media/mcd-logo.b45b7066.png" />
 
         {!loggedin && (
           <p className="ulb" style={mobileView ? { fontSize: "14px", display: "inline-block" } : {}}>
