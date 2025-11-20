@@ -56,12 +56,19 @@ const Inbox = ({ parentRoute, businessService = "HRMS", initialStates = {}, filt
 
   const isupdate = Digit.SessionStorage.get("isupdate");
 
-  const { isLoading: hookLoading, data, ...rest } = Digit.Hooks.hrms.useHRMSSearch(
-    searchParams,
-    tenantId,
-    paginationParams,
-    isupdate
-  );
+  const finalSearchParams = {
+    ...searchParams,
+    zone: Digit.SessionStorage.get("Employee.zone"),   // Always use session zone only
+  };
+
+  const { isLoading: hookLoading, data, ...rest } =
+    Digit.Hooks.hrms.useHRMSSearch(
+      finalSearchParams,
+      tenantId,
+      paginationParams,
+      isupdate
+    );
+
 
   // Reset to first page when filters change
   useEffect(() => {
