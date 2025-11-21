@@ -5,6 +5,7 @@ import ChangeCity from "../ChangeCity";
 import ChangeRole from "../ChangeRole";
 import ChangeLanguage from "../ChangeLanguage";
 import CustomUserDropdown from "./CustomUserDropdown";
+import FontIncrease from "./FontIncrease";
 
 
 const TextToImg = (props) => (
@@ -190,6 +191,8 @@ const TopBar = ({
                 <ChangeRole t={t} />
               )} */}
             </div>
+            <div style={{ width: "2px", height: "28px", backgroundColor: "rgb(203, 213, 225" }}></div>
+            <div className="left"> <FontIncrease /></div>
             <div style={{ width: "2px", height: "28px", backgroundColor: "rgb(203, 213, 225" }}></div>
             <div className="left">{showLanguageChange && <ChangeLanguage dropdown={true} />}</div>
             <div style={{ width: "2px", height: "28px", backgroundColor: "rgb(203, 213, 225" }}></div>

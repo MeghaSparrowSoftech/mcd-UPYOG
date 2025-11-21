@@ -66,8 +66,8 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
         y1: Math.floor(Math.random() * 50),
         x2: Math.floor(Math.random() * 200),
         y2: Math.floor(Math.random() * 50),
-        stroke: `rgb(${Math.floor(Math.random() * 200)}, ${Math.floor(Math.random() * 200)}, ${Math.floor(Math.random() * 200)})`,
-        strokeWidth: Math.floor(Math.random() * 2) + 1,
+        // stroke: `rgb(${Math.floor(Math.random() * 200)}, ${Math.floor(Math.random() * 200)}, ${Math.floor(Math.random() * 200)})`,
+        // strokeWidth: Math.floor(Math.random() * 2) + 1,
       });
     }
     return lines;
@@ -77,10 +77,10 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
     const dots = [];
     for (let i = 0; i < 30; i++) {
       dots.push({
-        cx: Math.floor(Math.random() * 200),
-        cy: Math.floor(Math.random() * 50),
-        r: Math.floor(Math.random() * 2) + 1,
-        fill: `rgb(${Math.floor(Math.random() * 200)}, ${Math.floor(Math.random() * 200)}, ${Math.floor(Math.random() * 200)})`,
+        // cx: Math.floor(Math.random() * 200),
+        // cy: Math.floor(Math.random() * 50),
+        // r: Math.floor(Math.random() * 2) + 1,
+        // fill: `rgb(${Math.floor(Math.random() * 200)}, ${Math.floor(Math.random() * 200)}, ${Math.floor(Math.random() * 200)})`,
       });
     }
     return dots;
