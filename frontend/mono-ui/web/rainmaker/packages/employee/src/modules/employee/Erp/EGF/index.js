@@ -130,7 +130,10 @@ async fetchTTL() {
     // Reading environment name (ex: dev, qa, uat, fin-uat etc) from the globalconfigs if exists else reading from the .env file
     finEnv = this.globalConfigExists() ? window.globalConfigs.getConfig("FIN_ENV") : process.env.REACT_APP_FIN_ENV;
     // Preparing finance subdomain url using the above environment name and the domain url
-    subdomainurl = domainurl;
+
+    // Construct subdomain dynamically
+    subdomainurl = finEnv ? `${finEnv}.${domainurl}` : `.${domainurl}`;
+
     erp_url = loc.protocol + "//" + subdomainurl + menuUrl;
     console.log("Finance Iframe URL:", erp_url);
     return (
@@ -242,11 +245,11 @@ async fetchTTL() {
     const finEnv = this.globalConfigExists() ? window.globalConfigs.getConfig("FIN_ENV") : process.env.REACT_APP_FIN_ENV;
 
     // Construct subdomain dynamically
-    const subdomainurl = finEnv ? `-${finEnv}.${domainurl}` : `.${domainurl}`;
+    const subdomainurl = finEnv ? `${finEnv}.${domainurl}` : `.${domainurl}`;
 
     const erp_url =
       loc.protocol + "//" + subdomainurl + menuUrl;
-
+    
     this.setState({ isLoading: true, lastUrl: menuUrl }, () => {
       const form = document.getElementById("erp_form");
       if (form) form.action = erp_url;
