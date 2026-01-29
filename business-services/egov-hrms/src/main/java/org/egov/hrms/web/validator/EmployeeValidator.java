@@ -352,15 +352,19 @@ public class EmployeeValidator {
 	 * 4. If the Designation code is valid
 	 * 5. If the assignment dates are valid
 	 * 
-	 * @param employee
+	 * @param employee	
 	 * @param errorMap
 	 * @param mdmsData
 	 */
 	private void validateAssignments(Employee employee, Map<String, String> errorMap, Map<String, List<String>> mdmsData) {
 		if (employee.getAssignments() != null && !employee.getAssignments().isEmpty()) {
 			List<Assignment> currentAssignments = employee.getAssignments().stream().filter(assignment -> assignment.getIsCurrentAssignment()).collect(Collectors.toList());
-			if (currentAssignments.size() != 1) {
-				errorMap.put(ErrorConstants.HRMS_INVALID_CURRENT_ASSGN_CODE, ErrorConstants.HRMS_INVALID_CURRENT_ASSGN_MSG);
+//			if (currentAssignments.size() != 1) {
+//				errorMap.put(ErrorConstants.HRMS_INVALID_CURRENT_ASSGN_CODE, ErrorConstants.HRMS_INVALID_CURRENT_ASSGN_MSG);
+//			}
+			// NEW LOGIC: Allow at least one (or more) active assignments
+			if (currentAssignments.isEmpty()) {
+			    errorMap.put(ErrorConstants.HRMS_INVALID_CURRENT_ASSGN_CODE, "At least one active assignment is required.");
 			}
 			employee.getAssignments().sort(new Comparator<Assignment>() {
 				@Override
