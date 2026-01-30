@@ -372,18 +372,18 @@ public class EmployeeValidator {
 					return assignment1.getFromDate().compareTo(assignment2.getFromDate());
 				}
 			});
-			int length = employee.getAssignments().size();
-			boolean overlappingCheck = false;
-			for (int i = 0; i < length - 1; i++) {
-				if (null != employee.getAssignments().get(i).getToDate() && employee.getAssignments().get(i).getToDate() > employee.getAssignments().get(i + 1).getFromDate())
-					overlappingCheck = true;
-			}
-			if (overlappingCheck)
-				errorMap.put(ErrorConstants.HRMS_OVERLAPPING_ASSGN_CODE, ErrorConstants.HRMS_OVERLAPPING_ASSGN_MSG);
+//			int length = employee.getAssignments().size();
+//			boolean overlappingCheck = false;
+//			for (int i = 0; i < length - 1; i++) {
+//				if (null != employee.getAssignments().get(i).getToDate() && employee.getAssignments().get(i).getToDate() > employee.getAssignments().get(i + 1).getFromDate())
+//					overlappingCheck = true;
+//			}
+//			if (overlappingCheck)
+//				errorMap.put(ErrorConstants.HRMS_OVERLAPPING_ASSGN_CODE, ErrorConstants.HRMS_OVERLAPPING_ASSGN_MSG);
 
 			for (Assignment assignment : employee.getAssignments()) {
-				if (!assignment.getIsCurrentAssignment() && !CollectionUtils.isEmpty(currentAssignments) && null != assignment.getToDate() && currentAssignments.get(0).getFromDate() < assignment.getToDate())
-					errorMap.put(ErrorConstants.HRMS_OVERLAPPING_ASSGN_CURRENT_CODE, ErrorConstants.HRMS_OVERLAPPING_ASSGN_CURRENT_MSG);
+//				if (!assignment.getIsCurrentAssignment() && !CollectionUtils.isEmpty(currentAssignments) && null != assignment.getToDate() && currentAssignments.get(0).getFromDate() < assignment.getToDate())
+//					errorMap.put(ErrorConstants.HRMS_OVERLAPPING_ASSGN_CURRENT_CODE, ErrorConstants.HRMS_OVERLAPPING_ASSGN_CURRENT_MSG);
 				if (!mdmsData.get(HRMSConstants.HRMS_MDMS_DEPT_CODE).contains(assignment.getDepartment()))
 					errorMap.put(ErrorConstants.HRMS_INVALID_DEPT_CODE, ErrorConstants.HRMS_INVALID_DEPT_MSG);
 				/*if (!assignment.getDesignation().equalsIgnoreCase("undefined") &&
