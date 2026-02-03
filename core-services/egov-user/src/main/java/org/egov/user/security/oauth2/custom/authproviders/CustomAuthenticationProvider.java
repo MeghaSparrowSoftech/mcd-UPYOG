@@ -27,6 +27,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -80,12 +82,56 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) {
-        String userName = authentication.getName();
+    	String userName = authentication.getName();
         String encryptedPassword = authentication.getCredentials().toString();
         String password = passwordCryptoUtil.decrypt(encryptedPassword);
 
         final LinkedHashMap<String, String> details = (LinkedHashMap<String, String>) authentication.getDetails();
 
+        // =====================================================
+        //  CAPTCHA VALIDATION
+        // =====================================================
+
+        HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            throw new OAuth2Exception("Session expired. Please refresh captcha");
+        }
+
+        String storedCaptcha = (String) session.getAttribute("CAPTCHA_VALUE");
+        String captcha = details.get("captcha");
+
+        log.info("Captcha entered: {}", captcha);
+        log.info("Captcha stored: {}", storedCaptcha);
+
+        if (storedCaptcha == null) {
+            throw new OAuth2Exception("Captcha expired. Please try again");
+        }
+
+        if (captcha == null || captcha.trim().isEmpty()) {
+            throw new OAuth2Exception("Captcha is mandatory");
+        }
+
+        if (!storedCaptcha.equals(captcha)) {
+        	
+            authAuditLogService.log(
+                    null,
+                    userName,
+                    request.getRemoteAddr(),
+                    request.getHeader("User-Agent"),
+                    session.getId(),
+                    "LOGIN",
+                    "FAILURE",
+                    request.getRequestURI()
+            );
+
+            throw new OAuth2Exception("Invalid captcha");
+        }
+
+        // Remove captcha after successful validation
+        session.removeAttribute("CAPTCHA_VALUE");
+        
+        
         String tenantId = details.get("tenantId");
         String userType = details.get("userType");
 
