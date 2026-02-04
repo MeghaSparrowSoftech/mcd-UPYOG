@@ -1,6 +1,6 @@
-import { BackButton, Dropdown, FormComposer, Loader, Toast } from "@nudmcdgnpm/digit-ui-react-components";
+import { BackButton, Dropdown, FormComposer, Loader, Toast, TextInput, RefreshIcon } from "@nudmcdgnpm/digit-ui-react-components";
 import PropTypes from "prop-types";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Background from "../../../components/Background";
 import Header from "../../../components/Header";
@@ -22,51 +22,43 @@ const setEmployeeDetail = (userObject, token) => {
 };
 
 const Login = ({ config: propsConfig, t, isDisabled }) => {
+  const history = useHistory();
+  const isMountedRef = useRef(true);
+
   const { data: cities, isLoading } = Digit.Hooks.useTenants();
   const { data: storeData, isLoading: isStoreLoading } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const [user, setUser] = useState(null);
   const [showToast, setShowToast] = useState(null);
   const [disable, setDisable] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState(null);
-  const [captchaVerified, setCaptchaVerified] = useState(false);
-  const [recaptchaError, setRecaptchaError] = useState("");
+  const [captchaText, setCaptchaText] = useState("");
+  const [captchaValue, setCaptchaValue] = useState("");
+  const [captchaId, setCaptchaId] = useState(""); // ✅ NEW
 
-  const history = useHistory();
-  const RECAPTCHA_SITE_KEY = "6LcSfi8sAAAAAJL0BhtL6Yg0WBI3z8KRpoLvvo9F"; // Your site key
-
-  // Load reCAPTCHA script
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://www.google.com/recaptcha/api.js";
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
-
     return () => {
-      // Clean up script when component unmounts
-      const scripts = document.querySelectorAll('script[src*="recaptcha"]');
-      scripts.forEach(s => s.remove());
+      isMountedRef.current = false;
     };
   }, []);
 
-  const handleRecaptchaChange = (token) => {
-    setRecaptchaToken(token);
-    setRecaptchaError("");
-  };
+  const defaultCity = useMemo(() => cities?.find((c) => c.code === "dl.mcd") || null, [cities]);
 
-  const validateRecaptcha = () => {
-    if (!captchaVerified || !recaptchaToken) {
-      setRecaptchaError("Please complete CAPTCHA verification");
-      return false;
+  const fetchCaptcha = async () => {
+    try {
+      const response = await Digit.UserService.userCaptchaSearch();
+      if (!isMountedRef.current) return;
+
+      setCaptchaText(response?.captcha || "");
+      setCaptchaId(response?.captchaId || "");
+      setCaptchaValue("");
+    } catch (err) {
+      console.error("Captcha fetch failed", err);
     }
-    setRecaptchaError("");
-    return true;
   };
 
-  const defaultCity = useMemo(() => {
-    return cities?.find((c) => c.code === "dl.mcd") || null;
-  }, [cities]);
+  useEffect(() => {
+    fetchCaptcha();
+  }, []);
 
   useEffect(() => {
     if (!user) {
@@ -94,7 +86,7 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
     }
 
     history.replace(redirectPath);
-  }, [user]);
+  }, [user, history]);
 
   const onLogin = async (data) => {
     if (!data.city) {
@@ -102,7 +94,8 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
       return;
     }
 
-    if (!validateRecaptcha()) {
+    if (!captchaValue) {
+      setShowToast("Please enter captcha");
       return;
     }
 
@@ -115,7 +108,8 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
       password: encryptedPassword,
       userType: "EMPLOYEE",
       tenantId: data.city.code,
-      recaptchaToken,
+      captcha: captchaValue,
+      captchaId: captchaId,
     };
 
     delete requestData.city;
@@ -144,15 +138,23 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
       const zon = Digit.SessionStorage.get("Employee.zone");
       console.log("=> ", zone);
     } catch (err) {
-      setShowToast(
-        err?.response?.data?.error_description || "Invalid login credentials!");
-      setTimeout(closeToast, 5000);
-      if (window.grecaptcha) window.grecaptcha.reset();
-      setCaptchaVerified(false);
-      setRecaptchaToken(null);
-    }
+      if (!isMountedRef.current) return;
 
-    setDisable(false);
+      const errorCode = err?.response?.data?.Errors?.[0]?.code;
+
+      setShowToast(err?.response?.data?.error_description || "Invalid login credentials!");
+      setTimeout(closeToast, 5000);
+
+      if (errorCode === "CAPTCHA_INVALID") {
+        fetchCaptcha();
+      }
+
+      setTimeout(() => {
+        if (isMountedRef.current) setShowToast(null);
+      }, 5000);
+    } finally {
+      if (isMountedRef.current) setDisable(false);
+    }
   };
 
   const closeToast = () => {
@@ -180,13 +182,68 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
         {
           label: t(password.label),
           type: password.type,
-          populators: {
-            name: password.name,
-          },
+          populators: { name: password.name },
           isMandatory: true,
         },
         {
-          // label: t(city.label),
+          type: "custom",
+          populators: {
+            name: "captcha",
+            component: ({ value, onChange }) => (
+              <div style={{ marginTop: "12px" }}>
+                <div style={{ display: "flex", marginBottom: "8px" }}>
+                  <div
+                    style={{
+                      height: "45px",
+                      minWidth: "120px",
+                      background: "#f2f2f2",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "20px",
+                      fontWeight: "700",
+                      letterSpacing: "4px",
+                    }}
+                  >
+                    {captchaText}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={fetchCaptcha}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      marginLeft: "12px",
+                      outline: "none",
+                    }}
+                    title="Refresh Captcha"
+                  >
+                    <RefreshIcon />
+                  </button>
+                </div>
+
+                <TextInput
+                  placeholder="Enter Captcha"
+                  value={value || ""}
+                  onChange={(e) => {
+                    setCaptchaValue(e.target.value);
+                    onChange(e.target.value);
+                  }}
+                  style={{
+                    width: "100%",
+                    padding: "8px",
+                    border: "1px solid #ccc",
+                    borderRadius: "4px",
+                  }}
+                />
+              </div>
+            ),
+          },
+        },
+        {
           type: city.type,
           populators: {
             name: city.name,
@@ -207,66 +264,9 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
             ),
           },
         },
-        {
-          label: t("CAPTCHA Verification"),
-          type: "custom",
-          populators: {
-            name: "recaptcha",
-            component: () => (
-              <div>
-                <div
-                  style={{
-                    transform: "scale(0.85)",
-                    transformOrigin: "0 0",
-                    width: "fit-content"
-                  }}
-                >
-                  <div
-                    className="g-recaptcha"
-                    data-sitekey={RECAPTCHA_SITE_KEY}
-                    data-callback="onRecaptchaSuccess"
-                  ></div>
-                </div>
-
-                {recaptchaError && (
-                  <div
-                    style={{
-                      color: "red",
-                      fontSize: "14px",
-                      marginTop: "5px"
-                    }}
-                  >
-                    {recaptchaError}
-                  </div>
-                )}
-              </div>
-            ),
-          },
-        }
-
-
       ],
     },
   ];
-
-  // Set up global callback for reCAPTCHA
-  useEffect(() => {
-    window.onRecaptchaSuccess = (token) => {
-      if (!token) {
-        setCaptchaVerified(false);
-        setRecaptchaToken(null);
-        return;
-      }
-      setRecaptchaToken(token);
-      setCaptchaVerified(true);
-      setRecaptchaError("");
-    };
-
-    return () => {
-      delete window.onRecaptchaSuccess;
-    };
-  }, []);
-
 
   return isLoading || isStoreLoading ? (
     <Loader />
@@ -278,7 +278,7 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
 
       <FormComposer
         onSubmit={onLogin}
-        isDisabled={isDisabled || disable || !captchaVerified}
+        isDisabled={isDisabled || disable || !captchaText || captchaValue !== captchaText}
         noBoxShadow
         inline
         submitInForm
