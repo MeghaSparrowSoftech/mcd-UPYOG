@@ -131,6 +131,13 @@ export const UserService = {
       auth: true,
     });
   },
+  //GET captcha for user
+  userCaptchaSearch: async (tenantId, data) => {
+    return Request({
+      url: Urls.UserCaptcha,
+      method: "GET",
+    });
+  },
   userSearch: async (tenantId, data, filters) => {
     return Request({
       url: Urls.UserSearch,
