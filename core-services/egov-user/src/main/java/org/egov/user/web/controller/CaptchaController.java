@@ -27,6 +27,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @RestController
@@ -45,7 +46,7 @@ public class CaptchaController {
     // CAPTCHA ENDPOINT
     // =========================================================
     @GetMapping("/captcha")
-    public ResponseEntity<byte[]> generateCaptcha() throws Exception {
+    public void generateCaptcha(HttpServletResponse response) throws Exception {
 
         String captchaText = generateRandomText(6);
         String captchaId = UUID.randomUUID().toString();
@@ -59,15 +60,13 @@ public class CaptchaController {
 
         byte[] imageBytes = generateCaptchaImage(captchaText);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_PNG);
-        headers.setCacheControl("no-store, no-cache, must-revalidate");
-        headers.setPragma("no-cache");
+        response.setContentType("image/png");
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Captcha-Id", captchaId);
 
-        // Send captchaId in header
-        headers.add("Captcha-Id", captchaId);
-
-        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+        response.getOutputStream().write(imageBytes);
+        response.getOutputStream().flush();
     }
 
 
