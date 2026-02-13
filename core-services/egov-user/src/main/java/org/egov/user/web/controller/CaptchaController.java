@@ -230,6 +230,9 @@ public class CaptchaController {
         return ResponseEntity
                 .ok()
                 .header("Content-Type", "image/svg+xml")
+                .header("Captcha-Id", captchaId)
+                .header("Cache-Control", "no-store, no-cache, must-revalidate")
+                .header("Pragma", "no-cache")
                 .body(svg);
     }
     
